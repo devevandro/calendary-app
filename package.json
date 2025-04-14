@@ -1,13 +1,14 @@
 {
-  "displayName": "My Electron App",
-  "name": "my-electron-app",
-  "description": "Your awesome app description",
+  "displayName": "Calendary App",
+  "productName": "Calendary App",
+  "name": "calendary-app",
+  "description": "Application to use like a schedule",
   "version": "0.0.0",
   "main": "./node_modules/.dev/main/index.js",
   "resources": "src/resources",
   "author": {
-    "name": "Dalton Menezes",
-    "email": "daltonmenezes@outlook.com"
+    "name": "Evandro Carvalho",
+    "email": "dev.evandro@gmail.com"
   },
   "license": "MIT",
   "packageManager": "pnpm@10.0.0",
