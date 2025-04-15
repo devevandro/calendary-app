@@ -9,15 +9,19 @@ export async function MainWindow() {
   const window = createWindow({
     id: "main",
     title: displayName,
-    width: 1000,
-    height: 600,
+    width: 1200,
+    height: 650,
     show: false,
     center: true,
     movable: true,
-    resizable: false,
+    resizable: true,
     alwaysOnTop: true,
     autoHideMenuBar: true,
-    titleBarStyle: "hiddenInset",
+    titleBarStyle: "default",
+    titleBarOverlay: {
+      color: "#345",
+      height: 120,
+    },
 
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
