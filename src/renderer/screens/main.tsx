@@ -7,7 +7,7 @@ import EventList from "../components/event-list";
 import EventsModal from "../components/events-modal";
 import { CalendarIcon } from "lucide-react";
 import { getBrazilianHoliday } from "../lib/holidays";
-import ThemeToggle from "renderer/components/theme-toggle";
+import { Header } from "renderer/components/header";
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -163,132 +163,131 @@ export default function CalendarPage() {
   const eventIndices = selectedDate ? getEventIndices(selectedDate) : [];
 
   return (
-    <div
-      className={`flex flex-col md:flex-row h-screen ${
-        isDarkMode ? "bg-gray-900" : "bg-white"
-      }`}
-    >
-      <div className="w-full md:w-1/3 bg-[#003fba] text-[#d3d3d3] p-6 flex flex-col relative">
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
-
-        {/* Nome da aplicação com fonte Pacifico */}
-        <div className="text-center mb-4 mt-2">
-          <h1 className="text-2xl font-bold flex items-center justify-center font-pacifico">
-            <CalendarIcon className="mr-2 h-6 w-6" />
-            Calendary
-          </h1>
-        </div>
-
-        <div className="flex-grow">
-          <div className="text-8xl font-bold mb-2 text-center">
-            {selectedDate ? selectedDate.getDate() : today.getDate()}
-          </div>
-          <div className="text-xl uppercase mb-8 text-center">
-            {selectedDate
-              ? selectedDate.toLocaleDateString("pt-BR", { weekday: "long" })
-              : today.toLocaleDateString("pt-BR", { weekday: "long" })}
+    <>
+      {/* <Header /> */}
+      <div
+        className={`flex flex-col md:flex-row h-screen ${
+          isDarkMode ? "bg-gray-900" : "bg-white"
+        }`}
+      >
+        <div className="w-full md:w-1/3 bg-[#003fba] text-[#d3d3d3] p-6 flex flex-col relative">
+          {/* Nome da aplicação com fonte Pacifico */}
+          <div className="text-center mb-4 mt-2">
+            <h1 className="text-2xl font-bold flex items-center justify-center font-pacifico">
+              <CalendarIcon className="mr-2 h-6 w-6" />
+              Calendary
+            </h1>
           </div>
 
-          <EventList
-            events={events}
-            selectedDate={selectedDate || today}
+          <div className="flex-grow">
+            <div className="text-8xl font-bold mb-2 text-center">
+              {selectedDate ? selectedDate.getDate() : today.getDate()}
+            </div>
+            <div className="text-xl uppercase mb-8 text-center">
+              {selectedDate
+                ? selectedDate.toLocaleDateString("pt-BR", { weekday: "long" })
+                : today.toLocaleDateString("pt-BR", { weekday: "long" })}
+            </div>
+
+            <EventList
+              events={events}
+              selectedDate={selectedDate || today}
+              onEditEvent={handleEditEvent}
+              onDeleteEvent={(index) => {
+                const newEvents = [...events];
+                newEvents.splice(index, 1);
+                setEvents(newEvents);
+              }}
+            />
+          </div>
+
+          {/* Versão da aplicação no rodapé */}
+          <div className="mt-auto pt-4 text-center text-sm text-[#d3d3d3]/70">
+            {appVersion}
+          </div>
+        </div>
+
+        <div
+          className={`w-full md:w-2/3 p-4 flex flex-col ${
+            isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
+          }`}
+        >
+          <div className="flex-grow">
+            <Calendar
+              currentDate={currentDate}
+              onDateChange={handleDateChange}
+              onSelectDate={handleDateSelect}
+              events={events}
+              minYear={currentYear}
+            />
+          </div>
+
+          {/* Apenas a lista de feriados do mês atual no rodapé */}
+          <div
+            className={`mt-auto pt-4 ${
+              isDarkMode ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            {currentMonthHolidays.length > 0 ? (
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">
+                {currentMonthHolidays.map((holiday, index) => (
+                  <div key={index} className="flex items-center">
+                    <span className="h-2 w-2 rounded-full bg-red-500 mr-1"></span>
+                    <span className="font-medium">{holiday.date}</span>:{" "}
+                    {holiday.name}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-xs italic">
+                Não há feriados nacionais neste mês.
+              </p>
+            )}
+          </div>
+        </div>
+
+        {showEventsModal && selectedDate && filteredEvents.length > 0 && (
+          <EventsModal
+            selectedDate={selectedDate}
+            events={filteredEvents}
+            eventIndices={eventIndices}
+            onClose={() => setShowEventsModal(false)}
+            onAddEvent={() => {
+              setShowEventsModal(false);
+              setShowEventForm(true);
+            }}
             onEditEvent={handleEditEvent}
             onDeleteEvent={(index) => {
               const newEvents = [...events];
               newEvents.splice(index, 1);
               setEvents(newEvents);
-            }}
-          />
-        </div>
 
-        {/* Versão da aplicação no rodapé */}
-        <div className="mt-auto pt-4 text-center text-sm text-[#d3d3d3]/70">
-          {appVersion}
-        </div>
-      </div>
-
-      <div
-        className={`w-full md:w-2/3 p-4 flex flex-col ${
-          isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
-        }`}
-      >
-        <div className="flex-grow">
-          <Calendar
-            currentDate={currentDate}
-            onDateChange={handleDateChange}
-            onSelectDate={handleDateSelect}
-            events={events}
-            minYear={currentYear}
-          />
-        </div>
-
-        {/* Apenas a lista de feriados do mês atual no rodapé */}
-        <div
-          className={`mt-auto pt-4 ${
-            isDarkMode ? "text-gray-400" : "text-gray-500"
-          }`}
-        >
-          {currentMonthHolidays.length > 0 ? (
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">
-              {currentMonthHolidays.map((holiday, index) => (
-                <div key={index} className="flex items-center">
-                  <span className="h-2 w-2 rounded-full bg-red-500 mr-1"></span>
-                  <span className="font-medium">{holiday.date}</span>:{" "}
-                  {holiday.name}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-xs italic">
-              Não há feriados nacionais neste mês.
-            </p>
-          )}
-        </div>
-      </div>
-
-      {showEventsModal && selectedDate && filteredEvents.length > 0 && (
-        <EventsModal
-          selectedDate={selectedDate}
-          events={filteredEvents}
-          eventIndices={eventIndices}
-          onClose={() => setShowEventsModal(false)}
-          onAddEvent={() => {
-            setShowEventsModal(false);
-            setShowEventForm(true);
-          }}
-          onEditEvent={handleEditEvent}
-          onDeleteEvent={(index) => {
-            const newEvents = [...events];
-            newEvents.splice(index, 1);
-            setEvents(newEvents);
-
-            // Se não houver mais eventos, fechar o modal
-            if (getFilteredEvents(selectedDate).length <= 1) {
-              setShowEventsModal(false);
-            }
-          }}
-        />
-      )}
-
-      {showEventForm && selectedDate && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-          <EventForm
-            onSubmit={handleAddEvent}
-            onCancel={() => {
-              setShowEventForm(false);
-              // Se estávamos editando, voltar para o modal de eventos
-              if (editingEvent !== null) {
-                setShowEventsModal(true);
-                setEditingEvent(null);
+              // Se não houver mais eventos, fechar o modal
+              if (getFilteredEvents(selectedDate).length <= 1) {
+                setShowEventsModal(false);
               }
             }}
-            selectedDate={selectedDate}
-            editingEvent={editingEvent?.event}
           />
-        </div>
-      )}
-    </div>
+        )}
+
+        {showEventForm && selectedDate && (
+          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-10">
+            <EventForm
+              onSubmit={handleAddEvent}
+              onCancel={() => {
+                setShowEventForm(false);
+                // Se estávamos editando, voltar para o modal de eventos
+                if (editingEvent !== null) {
+                  setShowEventsModal(true);
+                  setEditingEvent(null);
+                }
+              }}
+              selectedDate={selectedDate}
+              editingEvent={editingEvent?.event}
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 }
