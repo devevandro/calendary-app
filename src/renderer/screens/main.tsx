@@ -173,8 +173,8 @@ export default function CalendarPage() {
         <div className="w-full md:w-1/3 bg-[#003fba] text-[#d3d3d3] p-6 flex flex-col relative">
           {/* Nome da aplicação com fonte Pacifico */}
           <div className="text-center mb-4 mt-2">
-            <h1 className="text-2xl font-bold flex items-center justify-center font-pacifico">
-              <CalendarIcon className="mr-2 h-6 w-6" />
+            <h1 className="text-4xl font-bold flex items-center justify-center font-logo">
+              <CalendarIcon className="mr-2 h-8 w-8" />
               Calendary
             </h1>
           </div>

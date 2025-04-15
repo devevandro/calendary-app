@@ -53,7 +53,7 @@ export default function EventsModal({
   const isDarkMode = true;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-10">
       <div
         className={`${
           isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800"
