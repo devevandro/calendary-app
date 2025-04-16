@@ -15,7 +15,7 @@ export async function MainWindow() {
     resizable: true,
     alwaysOnTop: true,
     autoHideMenuBar: true,
-    titleBarStyle: "default",
+    titleBarStyle: "hiddenInset",
 
     webPreferences: {
       nodeIntegration: true,
