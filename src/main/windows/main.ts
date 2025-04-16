@@ -12,16 +12,18 @@ export async function MainWindow() {
     show: false,
     center: true,
     movable: true,
-    resizable: true,
-    alwaysOnTop: true,
+    resizable: false,
+    focusable: false,
+    skipTaskbar: false,
+    alwaysOnTop: false,
     autoHideMenuBar: true,
     titleBarStyle: "hiddenInset",
 
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInSubFrames: true,
-      preload: join(__dirname, "../preload/index.js"),
-    },
+      preload: join(__dirname, "../preload/index.js")
+    }
   });
 
   window.webContents.on("did-finish-load", () => {
