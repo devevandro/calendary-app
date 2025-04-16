@@ -1,10 +1,8 @@
-// Função para verificar se uma data é um feriado nacional brasileiro
 export function getBrazilianHoliday(date: Date): string | null {
   const day = date.getDate();
-  const month = date.getMonth() + 1; // getMonth() retorna 0-11
+  const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  // Feriados fixos
   const fixedHolidays: Record<string, string> = {
     "1/1": "Confraternização Universal",
     "15/2": "Feriado Municipal",
@@ -18,13 +16,11 @@ export function getBrazilianHoliday(date: Date): string | null {
     "25/12": "Natal",
   };
 
-  // Verificar feriados fixos
   const fixedKey = `${day}/${month}`;
   if (fixedHolidays[fixedKey]) {
     return fixedHolidays[fixedKey];
   }
 
-  // Calcular a Páscoa (Algoritmo de Meeus/Jones/Butcher)
   function calculateEaster(year: number): Date {
     const a = year % 19;
     const b = Math.floor(year / 100);
@@ -44,22 +40,17 @@ export function getBrazilianHoliday(date: Date): string | null {
     return new Date(year, month - 1, day);
   }
 
-  // Calcular feriados móveis baseados na Páscoa
   const easter = calculateEaster(year);
 
-  // Sexta-feira Santa (2 dias antes da Páscoa)
   const goodFriday = new Date(easter);
   goodFriday.setDate(easter.getDate() - 2);
 
-  // Carnaval (47 dias antes da Páscoa)
   const carnival = new Date(easter);
   carnival.setDate(easter.getDate() - 47);
 
-  // Corpus Christi (60 dias após a Páscoa)
   const corpusChristi = new Date(easter);
   corpusChristi.setDate(easter.getDate() + 60);
 
-  // Verificar feriados móveis
   if (day === easter.getDate() && month === easter.getMonth() + 1) {
     return "Páscoa";
   }
@@ -82,7 +73,6 @@ export function getBrazilianHoliday(date: Date): string | null {
   return null;
 }
 
-// Função para verificar se uma data é um feriado
 export function isHoliday(date: Date): boolean {
   return getBrazilianHoliday(date) !== null;
 }
