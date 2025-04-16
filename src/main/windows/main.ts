@@ -2,15 +2,13 @@ import { BrowserWindow } from "electron";
 import { join } from "node:path";
 
 import { createWindow } from "lib/electron-app/factories/windows/create";
-import { ENVIRONMENT } from "shared/constants";
-import { displayName } from "~/package.json";
 
 export async function MainWindow() {
   const window = createWindow({
     id: "main",
-    title: displayName,
-    width: 1200,
-    height: 650,
+    title: "",
+    width: 1100,
+    height: 620,
     show: false,
     center: true,
     movable: true,
@@ -18,12 +16,10 @@ export async function MainWindow() {
     alwaysOnTop: true,
     autoHideMenuBar: true,
     titleBarStyle: "default",
-    titleBarOverlay: {
-      color: "#345",
-      height: 120,
-    },
 
     webPreferences: {
+      nodeIntegration: true,
+      nodeIntegrationInSubFrames: true,
       preload: join(__dirname, "../preload/index.js"),
     },
   });
