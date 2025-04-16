@@ -7,7 +7,6 @@ import EventList from "../components/event-list";
 import EventsModal from "../components/events-modal";
 import { CalendarIcon } from "lucide-react";
 import { getBrazilianHoliday } from "../lib/holidays";
-import { Header } from "renderer/components/header";
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -23,26 +22,15 @@ export default function CalendarPage() {
   } | null>(null);
   const [mounted, setMounted] = useState(false);
 
-  // Versão da aplicação
   const appVersion = "v1.0.0";
 
-  // Montar o componente apenas no cliente para evitar problemas de hidratação
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Obter a data atual para comparações
   const today = new Date();
-  const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
 
-  // Verificar se o mês/ano atual é anterior ao mês/ano atual
-  const isPastMonth =
-    currentDate.getFullYear() < currentYear ||
-    (currentDate.getFullYear() === currentYear &&
-      currentDate.getMonth() < currentMonth);
-
-  // Obter feriados do mês atual
   const getCurrentMonthHolidays = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -50,7 +38,6 @@ export default function CalendarPage() {
 
     const holidays: { date: number; name: string }[] = [];
 
-    // Verificar cada dia do mês
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, month, day);
       const holidayName = getBrazilianHoliday(date);
@@ -158,18 +145,12 @@ export default function CalendarPage() {
 
   if (!mounted) return null;
 
-  const isDarkMode = true;
   const filteredEvents = selectedDate ? getFilteredEvents(selectedDate) : [];
   const eventIndices = selectedDate ? getEventIndices(selectedDate) : [];
 
   return (
     <>
-      {/* <Header /> */}
-      <div
-        className={`flex flex-col md:flex-row h-screen ${
-          isDarkMode ? "bg-gray-900" : "bg-white"
-        }`}
-      >
+      <div className={`flex flex-col md:flex-row m-auto h-screen bg-gray-900`}>
         <div className="w-full md:w-1/3 bg-[#003fba] text-[#d3d3d3] p-6 flex flex-col relative">
           {/* Nome da aplicação com fonte Pacifico */}
           <div className="text-center mb-4 mt-2">
@@ -208,9 +189,7 @@ export default function CalendarPage() {
         </div>
 
         <div
-          className={`w-full md:w-2/3 p-4 flex flex-col ${
-            isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
-          }`}
+          className={`w-full md:w-2/3 p-4 flex flex-col bg-gray-900 text-white`}
         >
           <div className="flex-grow">
             <Calendar
@@ -223,11 +202,7 @@ export default function CalendarPage() {
           </div>
 
           {/* Apenas a lista de feriados do mês atual no rodapé */}
-          <div
-            className={`mt-auto pt-4 ${
-              isDarkMode ? "text-gray-400" : "text-gray-500"
-            }`}
-          >
+          <div className={`mt-auto pt-4 text-gray-400`}>
             {currentMonthHolidays.length > 0 ? (
               <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">
                 {currentMonthHolidays.map((holiday, index) => (

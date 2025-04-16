@@ -353,7 +353,9 @@ export default function Calendar({
                           <CalendarIcon className="h-3 w-3 mr-1 text-red-500" />
                           <span>{holidayName}</span>
                         </div>
-                        <p className="text-xs opacity-75">Feriado Nacional</p>
+                        {holidayName !== "Feriado Municipal" && (
+                          <p className="text-xs opacity-75">Feriado Nacional</p>
+                        )}
                       </TooltipContent>
                     )}
                   </Tooltip>
