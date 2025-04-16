@@ -9,7 +9,7 @@ export function AppRoutes() {
   return (
     <Router
       main={<Route path="/" element={<CalendarPage />} />}
-      about={<Route path="/:login" element={<LoginPage />} />}
+      login={<Route path="/" element={<LoginPage />} />}
     />
   );
 }

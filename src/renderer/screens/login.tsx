@@ -85,7 +85,7 @@ export default function LoginPage() {
         } rounded-lg shadow-lg overflow-hidden`}
       >
         <div className="bg-[#003fba] p-6 text-center">
-          <h1 className="text-3xl font-bold flex items-center justify-center font-pacifico text-white">
+          <h1 className="text-4xl font-bold flex items-center justify-center font-logo text-white">
             <CalendarIcon className="mr-2 h-8 w-8" />
             Calendary
           </h1>
