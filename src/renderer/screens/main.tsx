@@ -5,7 +5,7 @@ import Calendar from "../components/calendar";
 import EventForm from "../components/event-form";
 import EventList from "../components/event-list";
 import EventsModal from "../components/events-modal";
-import { CalendarIcon } from "lucide-react";
+import { CalendarRangeIcon } from "lucide-react";
 import {
   getCurrentMonthHolidays,
   getEventIndices,
@@ -110,7 +110,7 @@ export default function CalendarPage() {
         <div className="w-full md:w-1/3 bg-[#003fba] text-[#d3d3d3] p-6 flex flex-col relative">
           <div className="text-center mb-4 mt-2">
             <h1 className="text-4xl font-bold flex items-center justify-center font-logo">
-              <CalendarIcon className="mr-2 h-8 w-8" />
+              <CalendarRangeIcon className="mr-2 h-8 w-8" />
               Calendary
             </h1>
           </div>

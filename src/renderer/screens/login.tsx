@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { CalendarIcon, Mail, User, Lock, ArrowRight } from "lucide-react";
+import { CalendarRangeIcon, Mail, User, Lock, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -79,7 +79,7 @@ export default function LoginPage() {
       >
         <div className="bg-[#003fba] p-6 text-center">
           <h1 className="text-4xl font-bold flex items-center justify-center font-logo text-white">
-            <CalendarIcon className="mr-2 h-8 w-8" />
+            <CalendarRangeIcon className="mr-2 h-8 w-8" />
             Calendary
           </h1>
           <p className="mt-2 text-[#d3d3d3]">
