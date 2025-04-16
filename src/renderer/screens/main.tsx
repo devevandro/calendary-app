@@ -9,7 +9,7 @@ import { CalendarRangeIcon } from "lucide-react";
 import {
   getCurrentMonthHolidays,
   getEventIndices,
-  getFilteredEvents,
+  getFilteredEvents
 } from "renderer/lib/functions";
 import Header from "renderer/components/header";
 
@@ -68,7 +68,7 @@ export default function CalendarPage() {
         date: new Date(selectedDate),
         title: event.title,
         description: event.description,
-        time: event.time,
+        time: event.time
       };
 
       if (editingEvent !== null) {
@@ -107,11 +107,7 @@ export default function CalendarPage() {
 
   return (
     <>
-      <div
-        className={`flex flex-col h-screen ${
-          isDarkMode ? "bg-gray-900" : "bg-white"
-        }`}
-      >
+      <div className={"flex flex-col h-screen bg-gray-900"}>
         <Header />
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
@@ -155,9 +151,9 @@ export default function CalendarPage() {
           </div>
 
           <div
-            className={`w-full md:w-2/3 p-4 flex flex-col ${
-              isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
-            }`}
+            className={
+              "w-full md:w-2/3 p-4 flex flex-col bg-gray-900 text-white"
+            }
           >
             <div className="flex-grow">
               <Calendar
@@ -170,16 +166,12 @@ export default function CalendarPage() {
             </div>
 
             {/* Apenas a lista de feriados do mês atual no rodapé */}
-            <div
-              className={`mt-auto pt-4 ${
-                isDarkMode ? "text-gray-400" : "text-gray-500"
-              }`}
-            >
+            <div className={"mt-auto pt-4 text-gray-400"}>
               {currentMonthHolidays.length > 0 ? (
                 <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">
                   {currentMonthHolidays.map((holiday, index) => (
                     <div key={index} className="flex items-center">
-                      <span className="h-2 w-2 rounded-full bg-red-500 mr-1"></span>
+                      <span className="h-2 w-2 rounded-full bg-red-500 mr-1" />
                       <span className="font-medium">{holiday.date}</span>:{" "}
                       {holiday.name}
                     </div>
