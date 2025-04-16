@@ -8,22 +8,8 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { X, Clock } from "lucide-react";
-
-interface EventFormProps {
-  onSubmit: (event: {
-    title: string;
-    description?: string;
-    time?: string;
-  }) => void;
-  onCancel: () => void;
-  selectedDate: Date;
-  editingEvent?: {
-    date: Date;
-    title: string;
-    description?: string;
-    time?: string;
-  } | null;
-}
+import { EventFormProps } from "renderer/lib/interfaces";
+import { validateTimeFormat } from "renderer/lib/functions";
 
 export default function EventForm({
   onSubmit,
@@ -39,29 +25,17 @@ export default function EventForm({
   const [timeError, setTimeError] = useState("");
   const [mounted, setMounted] = useState(false);
 
-  // Montar o componente apenas no cliente para evitar problemas de hidratação
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Validar o formato da hora (00:00)
-  const validateTimeFormat = (value: string) => {
-    if (!value) return true; // Campo opcional
-
-    const timeRegex = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
-    return timeRegex.test(value);
-  };
-
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    // Permitir apenas números e dois pontos
     if (!/^[0-9:]*$/.test(value)) return;
 
-    // Limitar o comprimento a 5 caracteres (00:00)
     if (value.length > 5) return;
 
-    // Adicionar automaticamente os dois pontos após os dois primeiros dígitos
     if (value.length === 2 && !value.includes(":") && time.length < 2) {
       setTime(`${value}:`);
       return;
@@ -69,7 +43,6 @@ export default function EventForm({
 
     setTime(value);
 
-    // Validar o formato apenas se o campo não estiver vazio
     if (value && !validateTimeFormat(value)) {
       setTimeError("Formato inválido. Use HH:MM (ex: 14:30)");
     } else {
@@ -80,7 +53,6 @@ export default function EventForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Verificar se o título está preenchido e o formato da hora é válido
     if (title.trim() && (!time || validateTimeFormat(time))) {
       onSubmit({
         title,
@@ -99,37 +71,24 @@ export default function EventForm({
 
   if (!mounted) return null;
 
-  const isDarkMode = true;
-
   return (
     <div
-      className={`${
-        isDarkMode ? "bg-gray-800 text-white" : "bg-white"
-      } rounded-lg shadow-lg p-6 w-full max-w-md`}
+      className={`bg-gray-800 text-white rounded-lg shadow-lg p-6 w-full max-w-md`}
     >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">
           {editingEvent ? "Editar Evento" : "Adicionar Evento"}
         </h2>
-        <button
-          onClick={onCancel}
-          className={`${
-            isDarkMode
-              ? "text-gray-300 hover:text-white"
-              : "text-gray-500 hover:text-gray-700"
-          }`}
-        >
+        <button onClick={onCancel} className={`text-gray-300 hover:text-white`}>
           <X className="h-5 w-5" />
         </button>
       </div>
 
-      <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} mb-4`}>
-        {formattedDate}
-      </p>
+      <p className={`text-gray-300 mb-4`}>{formattedDate}</p>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <Label htmlFor="title" className={isDarkMode ? "text-white" : ""}>
+          <Label htmlFor="title" className={"text-white"}>
             Título do Evento
           </Label>
           <Input
@@ -138,14 +97,12 @@ export default function EventForm({
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Digite o título do evento"
             required
-            className={
-              isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""
-            }
+            className={"bg-gray-700 border-gray-600 text-white"}
           />
         </div>
 
         <div className="mb-4">
-          <Label htmlFor="time" className={isDarkMode ? "text-white" : ""}>
+          <Label htmlFor="time" className={"text-white"}>
             Horário (formato 00:00)
           </Label>
           <div className="relative">
@@ -155,9 +112,7 @@ export default function EventForm({
               value={time}
               onChange={handleTimeChange}
               placeholder="Ex: 14:30"
-              className={`${
-                isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""
-              } pl-9`}
+              className={`bg-gray-700 border-gray-600 text-white pl-9`}
               aria-invalid={!!timeError}
             />
             <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -168,10 +123,7 @@ export default function EventForm({
         </div>
 
         <div className="mb-6">
-          <Label
-            htmlFor="description"
-            className={isDarkMode ? "text-white" : ""}
-          >
+          <Label htmlFor="description" className={"text-white"}>
             Descrição (opcional)
           </Label>
           <Textarea
@@ -180,9 +132,7 @@ export default function EventForm({
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Digite uma descrição para o evento"
             rows={3}
-            className={
-              isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""
-            }
+            className={"bg-gray-700 border-gray-600 text-white"}
           />
         </div>
 
@@ -191,9 +141,7 @@ export default function EventForm({
             type="button"
             variant="outline"
             onClick={onCancel}
-            className={
-              isDarkMode ? "border-gray-600 text-white hover:bg-gray-700" : ""
-            }
+            className={"border-gray-600 text-white hover:bg-gray-700"}
           >
             Cancelar
           </Button>

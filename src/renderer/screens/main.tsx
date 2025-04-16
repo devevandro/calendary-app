@@ -6,7 +6,11 @@ import EventForm from "../components/event-form";
 import EventList from "../components/event-list";
 import EventsModal from "../components/events-modal";
 import { CalendarIcon } from "lucide-react";
-import { getBrazilianHoliday } from "../lib/holidays";
+import {
+  getCurrentMonthHolidays,
+  getEventIndices,
+  getFilteredEvents,
+} from "renderer/lib/functions";
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -31,73 +35,24 @@ export default function CalendarPage() {
   const today = new Date();
   const currentYear = today.getFullYear();
 
-  const getCurrentMonthHolidays = () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    const holidays: { date: number; name: string }[] = [];
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month, day);
-      const holidayName = getBrazilianHoliday(date);
-
-      if (holidayName) {
-        holidays.push({ date: day, name: holidayName });
-      }
-    }
-
-    return holidays;
-  };
-
-  const currentMonthHolidays = getCurrentMonthHolidays();
+  const currentMonthHolidays = getCurrentMonthHolidays(currentDate);
 
   const handleDateChange = (date: Date) => {
     setCurrentDate(date);
   };
 
-  // Filtrar eventos para a data selecionada
-  const getFilteredEvents = (date: Date) => {
-    return events.filter(
-      (event) =>
-        event.date.getDate() === date.getDate() &&
-        event.date.getMonth() === date.getMonth() &&
-        event.date.getFullYear() === date.getFullYear()
-    );
-  };
-
-  // Encontrar os índices originais dos eventos filtrados
-  const getEventIndices = (date: Date) => {
-    return events
-      .map((event, index) => {
-        if (
-          event.date.getDate() === date.getDate() &&
-          event.date.getMonth() === date.getMonth() &&
-          event.date.getFullYear() === date.getFullYear()
-        ) {
-          return index;
-        }
-        return -1;
-      })
-      .filter((index) => index !== -1);
-  };
-
   const handleDateSelect = (date: Date) => {
-    // Não permitir selecionar datas passadas
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (date < today) return;
 
     setSelectedDate(date);
 
-    // Verificar se já existem eventos para esta data
-    const dateEvents = getFilteredEvents(date);
+    const dateEvents = getFilteredEvents(date, events);
 
     if (dateEvents.length > 0) {
-      // Se já existem eventos, mostrar o modal
       setShowEventsModal(true);
     } else {
-      // Se não existem eventos, abrir diretamente o formulário de criação
       setShowEventForm(true);
     }
   };
@@ -116,22 +71,19 @@ export default function CalendarPage() {
       };
 
       if (editingEvent !== null) {
-        // Estamos editando um evento existente
         const updatedEvents = [...events];
         updatedEvents[editingEvent.index] = newEvent;
         setEvents(updatedEvents);
         setEditingEvent(null);
       } else {
-        // Estamos adicionando um novo evento
         setEvents([...events, newEvent]);
       }
 
       setShowEventForm(false);
 
-      // Verificar se agora existem eventos para esta data
-      const updatedEvents = getFilteredEvents(selectedDate);
+      const updatedEvents = getFilteredEvents(selectedDate, events);
       if (updatedEvents.length > 0) {
-        setShowEventsModal(true); // Mostrar o modal após adicionar um evento
+        setShowEventsModal(true);
       }
     }
   };
@@ -139,20 +91,23 @@ export default function CalendarPage() {
   const handleEditEvent = (index: number) => {
     setEditingEvent({ index, event: events[index] });
     setSelectedDate(events[index].date);
-    setShowEventsModal(false); // Fechar o modal de eventos
-    setShowEventForm(true); // Abrir o formulário de evento
+    setShowEventsModal(false);
+    setShowEventForm(true);
   };
 
   if (!mounted) return null;
 
-  const filteredEvents = selectedDate ? getFilteredEvents(selectedDate) : [];
-  const eventIndices = selectedDate ? getEventIndices(selectedDate) : [];
+  const filteredEvents = selectedDate
+    ? getFilteredEvents(selectedDate, events)
+    : [];
+  const eventIndices = selectedDate
+    ? getEventIndices(selectedDate, events)
+    : [];
 
   return (
     <>
       <div className={`flex flex-col md:flex-row m-auto h-screen bg-gray-900`}>
         <div className="w-full md:w-1/3 bg-[#003fba] text-[#d3d3d3] p-6 flex flex-col relative">
-          {/* Nome da aplicação com fonte Pacifico */}
           <div className="text-center mb-4 mt-2">
             <h1 className="text-4xl font-bold flex items-center justify-center font-logo">
               <CalendarIcon className="mr-2 h-8 w-8" />
@@ -182,7 +137,6 @@ export default function CalendarPage() {
             />
           </div>
 
-          {/* Versão da aplicação no rodapé */}
           <div className="mt-auto pt-4 text-center text-sm text-[#d3d3d3]/70">
             {appVersion}
           </div>
@@ -237,8 +191,7 @@ export default function CalendarPage() {
               newEvents.splice(index, 1);
               setEvents(newEvents);
 
-              // Se não houver mais eventos, fechar o modal
-              if (getFilteredEvents(selectedDate).length <= 1) {
+              if (getFilteredEvents(selectedDate, events).length <= 1) {
                 setShowEventsModal(false);
               }
             }}
@@ -251,7 +204,6 @@ export default function CalendarPage() {
               onSubmit={handleAddEvent}
               onCancel={() => {
                 setShowEventForm(false);
-                // Se estávamos editando, voltar para o modal de eventos
                 if (editingEvent !== null) {
                   setShowEventsModal(true);
                   setEditingEvent(null);

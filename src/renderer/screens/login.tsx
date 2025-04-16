@@ -20,8 +20,6 @@ export default function LoginPage() {
     password?: string;
   }>({});
 
-  const isDarkMode = true;
-
   const validateForm = () => {
     const newErrors: { email?: string; name?: string; password?: string } = {};
     let isValid = true;
@@ -54,7 +52,6 @@ export default function LoginPage() {
     if (validateForm()) {
       setIsSubmitting(true);
 
-      // Simulação de login/cadastro
       setTimeout(() => {
         setIsSubmitting(false);
         if (isNewUser) {
@@ -75,14 +72,10 @@ export default function LoginPage() {
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-4 ${
-        isDarkMode ? "bg-gray-900" : "bg-gray-50"
-      }`}
+      className={`min-h-screen flex items-center justify-center p-4 bg-gray-900`}
     >
       <div
-        className={`w-full max-w-md ${
-          isDarkMode ? "bg-gray-800" : "bg-white"
-        } rounded-lg shadow-lg overflow-hidden`}
+        className={`w-full max-w-md bg-gray-800 rounded-lg shadow-lg overflow-hidden`}
       >
         <div className="bg-[#003fba] p-6 text-center">
           <h1 className="text-4xl font-bold flex items-center justify-center font-logo text-white">
@@ -98,7 +91,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="email" className={isDarkMode ? "text-white" : ""}>
+            <Label htmlFor="email" className={"text-white"}>
               E-mail
             </Label>
             <div className="relative">
@@ -109,9 +102,7 @@ export default function LoginPage() {
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`pl-10 ${
-                  isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""
-                }`}
+                className={`pl-10 bg-gray-700 border-gray-600 text-white" `}
                 aria-invalid={!!errors.email}
               />
             </div>
@@ -121,7 +112,7 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="name" className={isDarkMode ? "text-white" : ""}>
+            <Label htmlFor="name" className={"text-white"}>
               Nome
             </Label>
             <div className="relative">
@@ -132,9 +123,7 @@ export default function LoginPage() {
                 placeholder="Seu nome completo"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className={`pl-10 ${
-                  isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""
-                }`}
+                className={`pl-10 bg-gray-700 border-gray-600 text-white`}
                 aria-invalid={!!errors.name}
               />
             </div>
@@ -146,10 +135,7 @@ export default function LoginPage() {
           {/* Campo de senha que só aparece para novos usuários */}
           {isNewUser && (
             <div className="space-y-2">
-              <Label
-                htmlFor="password"
-                className={isDarkMode ? "text-white" : ""}
-              >
+              <Label htmlFor="password" className={"text-white"}>
                 Senha
               </Label>
               <div className="relative">
@@ -160,9 +146,7 @@ export default function LoginPage() {
                   placeholder="Sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`pl-10 ${
-                    isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""
-                  }`}
+                  className={`pl-10 bg-gray-700 border-gray-600 text-white`}
                   aria-invalid={!!errors.password}
                 />
               </div>
@@ -189,11 +173,7 @@ export default function LoginPage() {
               type="button"
               variant="ghost"
               onClick={toggleMode}
-              className={`text-sm flex items-center justify-center mx-auto ${
-                isDarkMode
-                  ? "text-gray-300 hover:text-white"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`text-sm flex items-center justify-center mx-auto text-gray-300 hover:text-white`}
             >
               {isNewUser ? "Já tenho uma conta" : "Criar nova conta"}
               <ArrowRight className="ml-1 h-3 w-3" />
