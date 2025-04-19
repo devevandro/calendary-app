@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 interface Event {
   date: Date;
-  title: string;
+  commitment: string;
   description?: string;
   time?: string;
 }
@@ -68,7 +68,7 @@ export default function EventList({
             <li key={index} className="border-l-2 border-[#d3d3d3] pl-3 group">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-bold">{event.title}</h3>
+                  <h3 className="font-bold">{event.commitment}</h3>
                   {event.time && (
                     <p className="text-[#d3d3d3]/90 text-sm">
                       Horário: {event.time}

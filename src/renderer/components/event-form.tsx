@@ -17,7 +17,7 @@ export default function EventForm({
   selectedDate,
   editingEvent,
 }: EventFormProps) {
-  const [title, setTitle] = useState(editingEvent?.title || "");
+  const [commitment, setCommitment] = useState(editingEvent?.commitment || "");
   const [description, setDescription] = useState(
     editingEvent?.description || ""
   );
@@ -50,12 +50,20 @@ export default function EventForm({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (title.trim() && (!time || validateTimeFormat(time))) {
+    if (commitment.trim() && (!time || validateTimeFormat(time))) {
+      const data = {
+        commitment,
+        description: description.trim() || undefined,
+        time: time || undefined,
+      };
+      await window.App.saveCommitment(data);
+      const response = await window.App.fetchCommitments();
+      console.log(response.data);
       onSubmit({
-        title,
+        commitment,
         description: description.trim() || undefined,
         time: time || undefined,
       });
@@ -93,8 +101,8 @@ export default function EventForm({
           </Label>
           <Input
             id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={commitment}
+            onChange={(e) => setCommitment(e.target.value)}
             placeholder="Digite o título do evento"
             required
             className={"bg-gray-700 border-gray-600 text-white"}
@@ -141,14 +149,16 @@ export default function EventForm({
             type="button"
             variant="outline"
             onClick={onCancel}
-            className={"border-gray-600 text-white hover:bg-gray-700"}
+            className={
+              "bg-gray-800 border-gray-600 text-white hover:bg-gray-700"
+            }
           >
             Cancelar
           </Button>
           <Button
             type="submit"
             className="bg-[#003fba] hover:bg-[#003fba]/80 text-[#d3d3d3]"
-            disabled={!!timeError || !title.trim()}
+            disabled={!!timeError || !commitment.trim()}
           >
             {editingEvent ? "Atualizar" : "Salvar"} Evento
           </Button>

@@ -2,7 +2,7 @@ import { BrowserWindow } from "electron";
 import { join } from "node:path";
 
 import { createWindow } from "lib/electron-app/factories/windows/create";
-import { ENVIRONMENT } from "shared/constants";
+import { ENVIRONMENT } from "shared/contants/constants";
 
 export async function MainWindow() {
   const window = createWindow({

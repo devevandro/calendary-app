@@ -9,7 +9,7 @@ import { CalendarRangeIcon } from "lucide-react";
 import {
   getCurrentMonthHolidays,
   getEventIndices,
-  getFilteredEvents
+  getFilteredEvents,
 } from "renderer/lib/functions";
 import Header from "renderer/components/header";
 
@@ -17,13 +17,18 @@ export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [events, setEvents] = useState<
-    { date: Date; title: string; description?: string; time?: string }[]
+    { date: Date; commitment: string; description?: string; time?: string }[]
   >([]);
   const [showEventForm, setShowEventForm] = useState(false);
   const [showEventsModal, setShowEventsModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<{
     index: number;
-    event: { date: Date; title: string; description?: string; time?: string };
+    event: {
+      date: Date;
+      commitment: string;
+      description?: string;
+      time?: string;
+    };
   } | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -59,16 +64,16 @@ export default function CalendarPage() {
   };
 
   const handleAddEvent = (event: {
-    title: string;
+    commitment: string;
     description?: string;
     time?: string;
   }) => {
     if (selectedDate) {
       const newEvent = {
         date: new Date(selectedDate),
-        title: event.title,
+        commitment: event.commitment,
         description: event.description,
-        time: event.time
+        time: event.time,
       };
 
       if (editingEvent !== null) {
@@ -127,7 +132,7 @@ export default function CalendarPage() {
               <div className="text-xl uppercase mb-8 text-center">
                 {selectedDate
                   ? selectedDate.toLocaleDateString("pt-BR", {
-                      weekday: "long"
+                      weekday: "long",
                     })
                   : today.toLocaleDateString("pt-BR", { weekday: "long" })}
               </div>
@@ -211,7 +216,7 @@ export default function CalendarPage() {
         )}
 
         {showEventForm && selectedDate && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-10">
             <EventForm
               onSubmit={handleAddEvent}
               onCancel={() => {

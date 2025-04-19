@@ -57,7 +57,7 @@ export default function EventsModal({
             <div className={`p-4 rounded-md mb-4 $bg-[#003fba]/30 text-white`}>
               <h3 className="font-bold text-lg mb-1">Evento mais recente:</h3>
               <div className="min-h-[60px]">
-                <p className="font-medium">{sortedEvents[0].title}</p>
+                <p className="font-medium">{sortedEvents[0].commitment}</p>
                 {sortedEvents[0].time && (
                   <p className={`text-gray-300 text-sm mt-1`}>
                     Horário: {sortedEvents[0].time}
@@ -99,7 +99,7 @@ export default function EventsModal({
                   >
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-bold">{event.title}</h3>
+                        <h3 className="font-bold">{event.commitment}</h3>
                         {event.time && (
                           <p className={`text-gray-300 text-sm`}>
                             Horário: {event.time}
