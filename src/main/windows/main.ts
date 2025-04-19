@@ -1,5 +1,7 @@
 import { BrowserWindow } from "electron";
 import { join } from "node:path";
+import "../ipc";
+import "../store";
 
 import { createWindow } from "lib/electron-app/factories/windows/create";
 
@@ -10,20 +12,15 @@ export async function MainWindow() {
     width: 1100,
     height: 620,
     show: false,
-    center: true,
-    movable: true,
-    resizable: false,
-    focusable: false,
-    skipTaskbar: false,
-    alwaysOnTop: false,
     autoHideMenuBar: true,
+    backgroundColor: "#101828",
     titleBarStyle: "hiddenInset",
 
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInSubFrames: true,
-      preload: join(__dirname, "../preload/index.js")
-    }
+      preload: join(__dirname, "../preload/index.js"),
+    },
   });
 
   window.webContents.on("did-finish-load", () => {
