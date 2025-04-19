@@ -2,13 +2,18 @@ export interface CalendarProps {
   currentDate: Date;
   onDateChange: (date: Date) => void;
   onSelectDate: (date: Date) => void;
-  events: { date: Date; title: string; description?: string; time?: string }[];
+  events: {
+    date: Date;
+    commitment: string;
+    description?: string;
+    time?: string;
+  }[];
   minYear: number;
 }
 
 export interface Event {
   date: Date;
-  title: string;
+  commitment?: string;
   description?: string;
   time?: string;
 }
@@ -25,7 +30,7 @@ export interface EventsModalProps {
 
 export interface EventFormProps {
   onSubmit: (event: {
-    title: string;
+    commitment: string;
     description?: string;
     time?: string;
   }) => void;
@@ -33,7 +38,7 @@ export interface EventFormProps {
   selectedDate: Date;
   editingEvent?: {
     date: Date;
-    title: string;
+    commitment: string;
     description?: string;
     time?: string;
   } | null;

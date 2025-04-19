@@ -1,6 +1,6 @@
 export type FilteredEventsType = {
   date: Date;
-  title: string;
+  commitment: string;
   description?: string;
   time?: string;
 }[];
